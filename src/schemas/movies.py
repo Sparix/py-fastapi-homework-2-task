@@ -17,12 +17,14 @@ class MovieDetailSchema(BaseModel):
         "from_attributes": True
     }
 
+
 class MovieListResponseSchema(BaseModel):
     movies: List[MovieDetailSchema]
     prev_page: str | None
     next_page: str | None
     total_pages: int
     total_items: int
+
 
 class GenreSchema(BaseModel):
     id: int
@@ -32,6 +34,7 @@ class GenreSchema(BaseModel):
         "from_attributes": True
     }
 
+
 class ActorSchema(BaseModel):
     id: int
     name: str
@@ -40,6 +43,7 @@ class ActorSchema(BaseModel):
         "from_attributes": True
     }
 
+
 class LanguageSchema(BaseModel):
     id: int
     name: str
@@ -47,6 +51,7 @@ class LanguageSchema(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
 
 class CountrySchema(BaseModel):
     id: int
@@ -57,8 +62,10 @@ class CountrySchema(BaseModel):
         "from_attributes": True
     }
 
+
 class MovieIDSchema(BaseModel):
     id: int
+
 
 class MovieBaseSchema(BaseModel):
     name: str
@@ -69,6 +76,7 @@ class MovieBaseSchema(BaseModel):
     budget: float = confloat(ge=0)
     revenue: float = confloat(ge=0)
 
+
 class MovieListItemSchema(MovieBaseSchema, MovieIDSchema):
     country: CountrySchema
     genres: List[GenreSchema]
@@ -78,6 +86,7 @@ class MovieListItemSchema(MovieBaseSchema, MovieIDSchema):
     model_config = {
         "from_attributes": True
     }
+
 
 class MovieCreateSchema(MovieBaseSchema):
     country: str
@@ -95,6 +104,7 @@ class MovieCreateSchema(MovieBaseSchema):
         if missing:
             raise ValueError("Invalid input data.")
         return values
+
 
 class MovieUpdateSchema(BaseModel):
     name: Optional[str] = None

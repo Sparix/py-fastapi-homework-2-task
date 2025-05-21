@@ -1,9 +1,5 @@
-from http.client import HTTPResponse
-from typing import List
-
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
-from pydantic_core._pydantic_core import ValidationError
 from sqlalchemy import select, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -48,7 +44,7 @@ async def get_movies(
 
 
 @router.post("/movies/", response_model=MovieListItemSchema, status_code=201)
-async def create_movie(movie_create: MovieCreateSchema,  db: AsyncSession = Depends(get_db)):
+async def create_movie(movie_create: MovieCreateSchema, db: AsyncSession = Depends(get_db)):
     movie = await db.execute(select(MovieModel).where(
         and_(
             MovieModel.name == movie_create.name,
@@ -57,8 +53,11 @@ async def create_movie(movie_create: MovieCreateSchema,  db: AsyncSession = Depe
     ))
     movie_result = movie.scalar_one_or_none()
     if movie_result is not None:
-        raise HTTPException(status_code=409,
-                            detail=f"A movie with the name '{movie_create.name}' and release date '{movie_create.date}' already exists.")
+        raise HTTPException(
+            status_code=409,
+            detail=f"A movie with the name '{movie_create.name}' "
+                   f"and release date '{movie_create.date}' already exists."
+        )
 
     country = await db.execute(select(CountryModel).where(CountryModel.code == movie_create.country))
     country_result = country.scalar_one_or_none()
