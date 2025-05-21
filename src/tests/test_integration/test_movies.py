@@ -379,6 +379,7 @@ async def test_create_movie_and_related_models(client, db_session):
     assert response.status_code == 201, f"Expected status code 201, but got {response.status_code}"
 
     response_data = response.json()
+    print("response", response)
     assert response_data["name"] == movie_data["name"], "Movie name does not match."
     assert response_data["date"] == movie_data["date"], "Movie date does not match."
     assert response_data["score"] == movie_data["score"], "Movie score does not match."
